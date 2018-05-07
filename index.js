@@ -22,6 +22,7 @@ var ManifestRevisionPlugin = function (output, options) {
     this.options.ignorePaths = options.ignorePaths || [];
     this.options.extensionsRegex = options.extensionsRegex || null;
     this.options.format = options.format || 'general';
+    this.options.prefetch = options.prefetch || false;
 };
 
 /**
@@ -173,7 +174,9 @@ ManifestRevisionPlugin.prototype.apply = function (compiler) {
     options.errorDetails = false;
     options.chunkOrigins = false;
 
-    self.walkAndPrefetchAssets(compiler);
+    if (this.options.prefetch) {
+      self.walkAndPrefetchAssets(compiler);
+    }
 
     compiler.plugin('done', function (stats) {
         var data = stats.toJson(options);
